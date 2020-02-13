@@ -10,14 +10,13 @@ class Database
     public function __construct()
     {
         try {
-            $this->connection = new PDO('mysql:host=localhost:8889;dbname=cookie;charset=utf8', 'root', 'root');
+            $this->connection = new PDO('mysql:host=localhost:8889;dbname=simple_web_page_layout;charset=utf8', 'root', 'root');
             $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
             print "DB Connection Failed: " . $e->getMessage();
         }
     }
 
-//    duomenu atvaizdavimas is DB ekrane
     public function select($sql)
     {
         return $this->connection->query($sql)->fetchAll(PDO::FETCH_OBJ);
@@ -25,9 +24,9 @@ class Database
 
 
 
-    public function deleteInsert($sql, $name)
+    public function deleteInsert($sql)
     {
-        return $this->connection->prepare($sql)->execute($name);
+        return $this->connection->query($sql);
     }
 
     function __destruct()
