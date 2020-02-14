@@ -2,6 +2,8 @@
 
 namespace db;
 
+include_once '../config.php';
+
 use PDO;
 use PDOException;
 
@@ -9,11 +11,15 @@ class Database
 {
     public function __construct()
     {
-        try {
-            $this->connection = new PDO('mysql:host=localhost:8889;dbname=simple_web_page_layout;charset=utf8', 'root', 'root');
-            $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        } catch (PDOException $e) {
-            print "DB Connection Failed: " . $e->getMessage();
+        if(CONFIG['use_database']) {
+            try {
+                $this->connection = new PDO("mysql:host=" . CONFIG['db_hostname']
+                 . ";dbname=" . CONFIG['db_name'] . ";charset=" . CONFIG['db_charset']
+                 , CONFIG['db_username'], CONFIG['db_password']);
+                $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            } catch (PDOException $e) {
+                print "DB Connection Failed: " . $e->getMessage();
+            }
         }
     }
 
@@ -34,3 +40,8 @@ class Database
         $this->connection = null;
     }
 }
+
+$db = New Database;
+$sql = "SELECT * FROM `users`";
+$data = $db->select($sql);
+var_dump($data);
